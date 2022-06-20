@@ -8,8 +8,8 @@
   
 Также, не менее важным плюсом является то, что использование итераторов позволяет реализовать универсальный интерфейс для итерабл объектов, что делает код намного более полиморфным  
 
-### map and filter  
-Очень схожи Array.prototype.map и Array.prototype.filter
+### map, flatMap and filter  
+Очень схожи Array.prototype.map, Array.prototype.flatMap и Array.prototype.filter 
 
 ```ts
 
@@ -20,6 +20,12 @@ const filterRes = iter.filter((el) => el%2) // returns new Iter({ iter: Generato
 
 const mapRes = iter.map((el) => el + 10) // returns new Iter({ iter: Generator<any, void, unknown> })
 ...mapRes.iter // 11, 12, ..., 16
+
+
+const fIter = new Iter([new Set(1, 2), [3, 4, [5, [6]]]]) // Может быть любая итерируемая структура (включающая [Symbol.Iterator] )
+
+const flatMapRes = fIter.flatMap((el) => el + 10) // returns new Iter({ iter: Generator<any, void, unknown> })
+...flatMapRes.iter // 11, 12, ..., 16
 
 ```
 
