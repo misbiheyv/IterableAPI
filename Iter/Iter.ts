@@ -21,6 +21,21 @@ export default class Iter<T> {
         return new Iter(mapIter)
     }
 
+    public flatMap(fn: (el: unknown) => unknown) {
+        const iter = this.iter
+    
+        function *flatMapIter(arr: Iterable<any>): IBasicIter {
+            for (const el of arr) {
+                if (el[Symbol.iterator])
+                    yield* flatMapIter(el)
+                else
+                    yield fn(el)
+            }
+        }
+    
+        return new Iter(flatMapIter(iter));
+    }
+
     public filter(fn: (el: unknown) => unknown): Iter<{iter: IBasicIter}> {
         const iter = this.iter
 
