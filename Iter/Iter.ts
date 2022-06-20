@@ -48,6 +48,44 @@ export default class Iter<T> {
         return new Iter(filterIter)
     }
 
+    public forEach(fn: (el: unknown) => void, period: number = 300): Promise<any> {
+        const iter = this.iter
+        function *_forEach(fn: (el: unknown) => void): Generator {
+            let time = Date.now()
+        
+            for (const el of iter) {
+                fn(el)
+        
+                if (Date.now() - time > period) {
+                    yield;
+                    time = Date.now()
+                }
+            }
+        }
+        
+        function executer(iter: Generator, value?: unknown): Promise<any> {
+            const 
+                res = iter.next(value),
+                promise = Promise.resolve(res.value)
+        
+            if (res.done) return promise
+        
+            return promise.then(
+                (value) => executer(iter, value),
+        
+                (error) => {
+                    const res = iter.throw(error)
+        
+                    if (res.done) return res.value
+        
+                    return executer(iter, res.value)
+                }
+            )
+        }
+
+        return executer(_forEach(fn))
+    }
+
     public take(n: number): Iter<{iter: IBasicIter}> {
         const iter = this.iter
 
