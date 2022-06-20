@@ -16,10 +16,10 @@
 const iter = new Iter([1, 2, 3, 4, 5, 6]) // Может быть любая итерируемая структура (включающая [Symbol.Iterator] )
 
 const filterRes = iter.filter((el) => el%2) // returns new Iter({ iter: Generator<any, void, unknown> })
-...filterRes // 2, 4, 6
+...filterRes.iter // 2, 4, 6
 
 const mapRes = iter.map((el) => el + 10) // returns new Iter({ iter: Generator<any, void, unknown> })
-...mapRes // 11, 12, ..., 16
+...mapRes.iter // 11, 12, ..., 16
 
 ```
 
@@ -33,7 +33,7 @@ Iter содержит 2 специфических метода:
 const iter = new Iter([1, 2, 3])
 
 const takeRes = iter.take(2) // returns new Iter({ iter: Generator<any, void, unknown> })
-...takeRes // 1, 2
+...takeRes.iter // 1, 2
 ```
 
 ### enumerate  
@@ -43,5 +43,5 @@ const takeRes = iter.take(2) // returns new Iter({ iter: Generator<any, void, un
 const iter = new Iter([1, 2, 3])
 
 const enumerateRes = iter.enumerate(2) // returns new Iter({ iter: Generator<any[], void, unknown> })
-...enumerateRes // [0, 1], [1, 2], [2, 3]
+...enumerateRes.iter // [0, 1], [1, 2], [2, 3]
 ```
