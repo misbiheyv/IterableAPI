@@ -24,7 +24,7 @@ const mapRes = iter.map((el) => el + 10) // returns new Iter({ iter: Generator<a
 
 const fIter = new Iter([new Set(1, 2), [3, 4, [5, [6]]]]) // Может быть любая итерируемая структура (включающая [Symbol.Iterator] )
 
-const flatMapRes = iter.map((el) => el + 10) // returns new Iter({ iter: Generator<any, void, unknown> })
+const flatMapRes = fIter.flatMap((el) => el + 10) // returns new Iter({ iter: Generator<any, void, unknown> })
 ...flatMapRes.iter // 11, 12, ..., 16
 
 ```
