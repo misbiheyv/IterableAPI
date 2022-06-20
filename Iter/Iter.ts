@@ -1,6 +1,4 @@
-type IBasicIter = Generator<unknown, void, unknown>
-type IEnumerateIter = Generator<unknown[], void, unknown>
-
+import type { BasicIter, EnumerateIter } from "./interface";
 
 export default class Iter<T> {
     public iter: Iterable<any>;
@@ -9,10 +7,10 @@ export default class Iter<T> {
         this.iter = iter
     }
     
-    public map(fn: (el: unknown) => unknown): Iter<{iter: IBasicIter}> {
+    public map(fn: (el: unknown) => unknown): Iter<{iter: BasicIter}> {
         const iter = this.iter
 
-        const mapIter: IBasicIter = (function *() {
+        const mapIter: BasicIter = (function *() {
             for (const el of iter) {
                 yield fn(el)
             }
@@ -24,7 +22,7 @@ export default class Iter<T> {
     public flatMap(fn: (el: unknown) => unknown) {
         const iter = this.iter
     
-        function *flatMapIter(arr: Iterable<any>): IBasicIter {
+        function *flatMapIter(arr: Iterable<any>): BasicIter {
             for (const el of arr) {
                 if (el[Symbol.iterator])
                     yield* flatMapIter(el)
@@ -36,10 +34,10 @@ export default class Iter<T> {
         return new Iter(flatMapIter(iter));
     }
 
-    public filter(fn: (el: unknown) => unknown): Iter<{iter: IBasicIter}> {
+    public filter(fn: (el: unknown) => unknown): Iter<{iter: BasicIter}> {
         const iter = this.iter
 
-        const filterIter: IBasicIter = (function *() {
+        const filterIter: BasicIter = (function *() {
             for (const el of iter) {
                 if(fn(el)) yield el
             }
@@ -97,10 +95,10 @@ export default class Iter<T> {
         return executer(_forEach(fn))
     }
 
-    public take(n: number): Iter<{iter: IBasicIter}> {
+    public take(n: number): Iter<{iter: BasicIter}> {
         const iter = this.iter
 
-        const takeIter: IBasicIter = (function *() {
+        const takeIter: BasicIter = (function *() {
             for (const el of iter) {
                 if (n-- > 0) yield el
             }
@@ -109,10 +107,10 @@ export default class Iter<T> {
         return new Iter(takeIter)
     }
 
-    public enumerate(): Iter<IEnumerateIter> {
+    public enumerate(): Iter<EnumerateIter> {
         const iter = this.iter
         
-        const enumerateIter: IEnumerateIter = (function *() {
+        const enumerateIter: EnumerateIter = (function *() {
             let i = 0;
 
             for (const el of iter) {
